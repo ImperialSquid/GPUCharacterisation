@@ -13,6 +13,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 This project is a rewritten version of one I did in my data science masters. The dataset and findings are all the same, but the code, this report and the structure therein, have been reworked to give a more digestible view of what was done (think actual medieval ruin vs museum exhibit about one) as well as to brush up on some of the language used. 
 
-The orignal project was undertaken in a module intended to teach about data project methodology (in that case CRISP-DM) and sticks very strictly to the prescribed format for the writeup, both this report and the summary version are written in a more flexible format, omitting headings where unneeded.
+The orignal project was undertaken in a module intended to teach about data project methodology (in that case CRISP-DM) and sticks very strictly to the prescribed format for the writeup, both this report and the summary version are written in a more flexible format, omitting headings where unneeded, and are overall just much less verbose (though if you do want the nitty gritty, the original is also included in this repo).
 
 There are two version of this report, this one is intended for a stats literate audience and so doesn't shy away from getting into the tests and overall reasoning used. There is also a summary version that focuses on the main findings for a more lay audience.
