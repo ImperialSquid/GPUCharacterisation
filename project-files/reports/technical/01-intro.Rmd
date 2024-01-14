@@ -1,0 +1,30 @@
+# Introduction
+
+## Background
+The three datasets being analysed in this report comes from a terapixel visualisation of Newcastle upon Tyne by the Newcastle Urban Observatory. The visualisation took advantage of a cloud-based deployment model with a scalable architecture. As the environmental data was being processed, the datasets were created from application checkpoint and system metric output from a terapixel image production.
+
+## Objectives
+The project was undertaken with no specific objectives, however, after looking at the datasets provided, it was decided to aim at answering several questions, namely:
+
+- Are there any types of events that dominate the runtime?
+- Are there any identifiable factors that affect rendering/processing times?
+- Can we identify significantly slower(/faster) cards compared to the rest?
+
+## Data Explanation
+The three datasets provided are as such:
+- `application-checkpoints` - contains "application checkpoint events" throughout the execution of the render job, every time an event starts or stops, it is logged here.
+- `gpu` - contains GPU status metrics taken throughout the render, metrics include temperature, power draw, memory and processor utilisation
+- `task-x-y` - contains x and y coordinates of which part the image was being rendered for each task and the task and job ids for each
+
+Full descriptions of the columns, descriptions and their data types are in appendices A, B and C respectively.
+
+## Plan Outline
+
+
+
+
+
+
+
+
+

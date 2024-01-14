@@ -1,0 +1,101 @@
+# Data Understanding
+
+## Data Description
+The three datasets provided are as such:
+- `application-checkpoints` - contains "application checkpoint events" throughout the execution of the render job, every time an event starts or stops, it is logged here.
+- `gpu` - contains GPU status metrics taken throughout the render, metrics include temperature, power draw, memory and processor utilisation
+- `task-x-y` - contains x and y coordinates of which part the image was being rendered for each task and the task and job ids for each
+
+
+### Dataset 1 - application-checkpoints
+
+---------------------------------------------------------------------
+Column         Data type   Description
+-------        ----------  --------------------------------------
+timestamp      text        The date and time of the event being logged in "%Y-%m-%dT%H:%M:%OS3Z" format (see R spec)
+               (/datetime) 
+
+hostname       text        The VM hostname as assigned by Azure
+
+eventName      text        The event type being logged, can be:
+                           - **TotalRender** - The entire task
+                           - **Saving Config** - Pre render configuring
+                           - **Render** - Actual rendering job
+                           - **Tiling** - Post processing
+                           - **Uploading** - Uploading finished wortk
+
+eventType      text        Either START or STOP for whether the relevant task is starting or stopping
+
+jobId          text        The ID of the associated job
+
+taskId         text        The ID of the asscoiated task
+-------------------------------------------------------------------------
+
+
+### Dataset 2 - gpu
+
+---------------------------------------------------------------------
+Column         Data type   Description
+-------        ----------  --------------------------------------
+timestamp      text        The timestamp for when the GPU was polled for its metrics.
+               (/datetime) 
+
+hostname       text        VM hostname, matches with `application-checkpoints` dataset
+
+gpuSerial      text        The GPU card's serial number
+
+gpuUUID        text        The GPU card's UUID in Azure
+
+powerDrawWatt  int         GPU power draw in Watts
+
+gpuTempC       int         GPU temperature in Celcius
+
+gpuUtilPerc    int         GPU processor utilisation (as %age)
+
+gpuMemUtilPerc int         GPU memory utilisation (as %age)
+----------------------------------------------------------------------
+
+
+### Dataset 3 - task-x-y
+
+---------------------------------------------------------------------
+Column         Data type   Description
+-------        ----------  --------------------------------------
+jobId          text        The ID of the associated job
+
+taskId         text        The ID of the asscoiated task
+
+x              int         The x coordinate of the area to be rendered
+
+y              int         The y coordinate of the area to be rendered
+
+level          int         The zoom level (higher is more zoomed in), can be 4, 8 or 12
+-------------------------------------
+
+## Data Augmentation Plan
+This section covers my plan for inital data cleaning and further augmentation
+
+### Dataset 1 - application-checkpoints
+- timestamp - *Modify* - Convert to actual datatimes rather than text to allow for easier maths
+- hostname - *Modify* - Simplify names for easier analysis (keep originals elsewhere), convert to factor
+- eventName - *Modify* - Minor renaming for aesthetics later
+- eventType - *Modify* - Pivot longer so start/stop times are in the same row
+- jobId - *Modify* - Each level rendered matches the jobId 1 to 1, extract level and discard everything else
+- taskId - *Keep*
+
+### Dataset 2 - gpu
+- timestamp - *Modify* - Same as above
+- hostname - *Modify* - Same as above
+- gpuSerial - *Discard* - Information is contained with hostname, store elsewhere and remove this column
+- gpuUUID - *Discard* - Same as gpuSerial
+- powerDrawWatt - *Keep*
+- gpuTempC - *Keep*
+- gpuUtilPerc - *Keep*
+- gpuMemUtilPerc - *Keep*
+
+### Dataset 3 - task-x-y
+- jobId - *Discard* - Level column has identical information value, uneeded
+- taskId - *Keep*
+- x - *Keep*
+- y - *Keep*
+- level - *Keep*
