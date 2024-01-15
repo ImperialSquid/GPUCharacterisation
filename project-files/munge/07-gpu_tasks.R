@@ -23,7 +23,7 @@ gpu_tasks = gpu_tasks %>%
   mutate(eventName = factor(eventName)) %>%
   group_by(hostname) %>%
   fill(taskId, .direction = "down") %>%
-  mutate(taskId = coalesce(taskId, paste0(first(hostname),"-pre-start")))
+  mutate(taskId = coalesce(taskId, "pre-start"))
 
 # Do some funky data manip to get times for the start and stop of idle events
 gpu_tasks = gpu_tasks %>%
