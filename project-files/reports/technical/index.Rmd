@@ -2,7 +2,7 @@
 title: "Technical Report"
 author: "Ben Jaeger"
 date: "2024-01-12"
-output: bookdown::pdf_book
+knit: "bookdown::render_book"
 ---
 
 ```{r setup, include=FALSE}
