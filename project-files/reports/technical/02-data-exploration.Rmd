@@ -12,19 +12,20 @@ The three datasets provided are as such:
 ---------------------------------------------------------------------
 Column         Data type   Description
 -------        ----------  --------------------------------------
-timestamp      text        The date and time of the event being logged in "%Y-%m-%dT%H:%M:%OS3Z" format (see R spec)
-               (/datetime) 
+timestamp      text        The date and time of the event being logged 
+               (/datetime) in "%Y-%m-%dT%H:%M:%OS3Z" format (see R spec)
 
 hostname       text        The VM hostname as assigned by Azure
 
 eventName      text        The event type being logged, can be:
-                           - **TotalRender** - The entire task
-                           - **Saving Config** - Pre render configuring
-                           - **Render** - Actual rendering job
-                           - **Tiling** - Post processing
-                           - **Uploading** - Uploading finished wortk
+                           *TotalRender* (the entire task),
+                           *Saving Config* (pre render configuring),
+                           *Render* (actual rendering job),
+                           *Tiling* (post processing),
+                           *Uploading* (uploading finished work)
 
-eventType      text        Either START or STOP for whether the relevant task is starting or stopping
+eventType      text        Either START or STOP for whether the relevant 
+                           task is starting or stopping
 
 jobId          text        The ID of the associated job
 
@@ -37,10 +38,11 @@ taskId         text        The ID of the asscoiated task
 ---------------------------------------------------------------------
 Column         Data type   Description
 -------        ----------  --------------------------------------
-timestamp      text        The timestamp for when the GPU was polled for its metrics.
-               (/datetime) 
+timestamp      text        The timestamp for when the GPU was polled 
+               (/datetime) for its metrics
 
-hostname       text        VM hostname, matches with `application-checkpoints` dataset
+hostname       text        VM hostname, matches with 
+                           `application-checkpoints` dataset
 
 gpuSerial      text        The GPU card's serial number
 
