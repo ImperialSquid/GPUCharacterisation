@@ -1,2 +1,5 @@
 bookdown::pdf_book:
   fig_caption: false
+  fig_height: 1
+  fig_width: 1
+  
