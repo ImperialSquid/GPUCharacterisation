@@ -27,7 +27,7 @@ As we can see in the above diagram, there are also gaps left from when metrics w
 
 As for times, the start time of each Idle period will be set to the end time of the last "busy" period, and vice versa with the end time being the next soonest start time. Luckily we have a TotalRender event which logs the entirity of each task so we don't need to fiddle with the data too much. Any logs that take place before the first or after the last task have an NA in either the start or stop column, this was decided to be left in since "between task" idleness was likely more important when it comes to down time analysis (and the more rendering is done in one batch, the less important it becomes due to being a decreasing percentage of the overall usage time)
 
-```{r gpu-fill, echo=FALSE, fig.align="center", out.width="50%"}
+```{r gpu-fill, echo=FALSE, fig.align="center", out.width="35%"}
 knitr::include_graphics("images/gpu-fill.png")
 ```
 
