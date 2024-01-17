@@ -1,0 +1,44 @@
+# Data Processing
+
+## Processing Overview
+The data processing involved in this project involves 7 steps:
+
+#. Convert timestamps to useable datetime format
+#. Simplify hostnames and extract other columns that add no information
+#. Factorise remaining categorical variables
+#. Simplify job IDs to show the level
+#. Manipulate checkps dataset from its two-row START/STOP format to a one-row start-time/end-time format
+#. Left join gpu and checkps dataset, so we have data metrics assigned to the task being done at the time
+#. Reduce that new dataset down to only show one "average" line per event rather than all rows (as this skews towards overrepresting long tasks)
+
+Tasks 1-4 and 7 are relatively simple tasks mostly consisting of rearranging the data and as such, their explanation is skipped in this report (they were included in the original for the curious however). Task 5 is slightly notable for the fact that some events were double logged so combining start and stop times wasn't a simple pivot, however with some filtering the task was relatively simple.
+
+Task 6 and 7 are notable for having some interesting implmentation decision and are discussed further below.
+
+### Task 6 - Joining the gou and checkpoints tables
+As a reminder, our gpu table has logged metrics for the GPUs taken at various intervals, and our checkpoints table has each task's start and stop times. To join these we want to match each gpu log that lands between the start and stop times, unfortunately `dplyr`'s join functions aren't powerful enough to allow inequality matches like this, so we make use of `sqldf` instead since it allows us to use SQL notation for our joins.
+
+
+```{r gpu-join, echo=FALSE, fig.align="center", out.width="100%"}
+knitr::include_graphics("images/gpu-join.png")
+```
+
+As we can see in the above diagram, there are also gaps left from when metrics were logged but no associated task was being run. To fill these in, any NAs in the event column will be set to "Idle". The task will carry forward until it starts the next task, in cases where metrics were logged but no tasks have started, the task will be labelled "pre-start".
+
+As for times, the start time of each Idle period will be set to the end time of the last "busy" period, and vice versa with the end time being the next soonest start time. Luckily we have a TotalRender event which logs the entirity of each task so we don't need to fiddle with the data too much. Any logs that take place before the first or after the last task have an NA in either the start or stop column, this was decided to be left in since "between task" idleness was likely more important when it comes to down time analysis (and the more rendering is done in one batch, the less important it becomes due to being a decreasing percentage of the overall usage time)
+
+```{r gpu-fill, echo=FALSE, fig.align="center", out.width="50%"}
+knitr::include_graphics("images/gpu-fill.png")
+```
+
+
+## Final Data Summary
+Before moving on to the analysis, here is a summary of the tables made after preparing our data.
+
+- **checkps** – This is one of the original datasets, superseded by *checkps_start_stop* somewhat and more by *benchmarked_tasks*
+- **gpu** – This is an original dataset too, superseded by *gpu_tasks*
+- **task_x_y** - The third original dataset, not superseded anywhere
+- **checkps_start_stop** – This dataset includes each task/event, and it's start, end and duration times, mostly it was used in the creation of other tables but also acts as a smaller table for task/event timing analysis
+- **gpu_tasks** – This dataset contains the GPU metrics data, combined with the task-event being done at the time, notably it is not summarised by tasks/events
+- **benchmarked_tasks** – This dataset contains each task/event, it's start, stop, duration and associated matrics, it is averaged within task/events
+- **vm_names** – This dataset contains the simplified VM names and the actual hostnames, GPU serial number and GPU UUID they refer to, not used for analysis but useful info for actioning any findings
